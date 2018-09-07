@@ -1,7 +1,7 @@
 from tours import app
 from tours import api_tui
 from tours import api_tez
-from tours import spider_selena
+from scr.spiders import spider_selena
 from flask import jsonify
 from flask import request
 
@@ -36,4 +36,5 @@ def tours():
 
 @app.route('/bus')
 def bus_tours():
-    return jsonify(spider_selena.get_data2())
+    selena = spider_selena.QuotesSpider()
+    return jsonify(spider_selena.run_spider())
