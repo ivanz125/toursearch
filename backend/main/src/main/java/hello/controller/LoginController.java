@@ -1,7 +1,7 @@
 package hello.controller;
 
 import hello.model.User;
-import hello.repository.UserRepository;
+import hello.repository.contract.UserRepository;
 import hello.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,20 +35,12 @@ public class LoginController {
         password = Utils.md5(password);
         if (password == null) return "Exception";
 
-        for (User user : userRepository.findAll()) {
-            if (email.equals(user.getEmail())) {
-                // Success
-                System.out.println(user.getEmail() + " : " + user.getPassword());
-                System.out.println(user.getPassword());
-                System.out.println(password);
-                if (password.equals(user.getPassword())) {
-                    session.setAttribute("user", user);
-                    session.setMaxInactiveInterval(10);
-                    return "OK";
-                }
-                return "Wrong password";
-            }
+        User user = userRepository.getUserByLogin(email, password);
+        if (user != null) {
+            session.setAttribute("user", user);
+            session.setMaxInactiveInterval(10);
+            return "OK";
         }
-        return "User not exists";
+        return "Not OK";
     }
 }
