@@ -1,6 +1,6 @@
-package hello.repository.contract;
+package tours.repository.contract;
 
-import hello.model.User;
+import tours.model.User;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,4 +1,4 @@
-package hello.filter;
+package tours.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;

@@ -1,4 +1,4 @@
-package hello.model;
+package tours.model;
 
 public class Greeting {
 

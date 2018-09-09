@@ -1,7 +1,7 @@
-package hello.repository.impl;
+package tours.repository.impl;
 
-import hello.model.User;
-import hello.repository.contract.UserRepository;
+import tours.model.User;
+import tours.repository.contract.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

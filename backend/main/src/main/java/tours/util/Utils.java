@@ -1,4 +1,4 @@
-package hello.util;
+package tours.util;
 
 import java.security.MessageDigest;
 

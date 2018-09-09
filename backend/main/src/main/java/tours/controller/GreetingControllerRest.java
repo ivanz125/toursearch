@@ -1,6 +1,6 @@
-package hello.controller;
+package tours.controller;
 
-import hello.model.Greeting;
+import tours.model.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,4 +1,4 @@
-package hello.controller;
+package tours.controller;
 
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;

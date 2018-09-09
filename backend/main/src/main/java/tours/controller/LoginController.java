@@ -1,8 +1,8 @@
-package hello.controller;
+package tours.controller;
 
-import hello.model.User;
-import hello.repository.contract.UserRepository;
-import hello.util.Utils;
+import tours.model.User;
+import tours.repository.contract.UserRepository;
+import tours.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
