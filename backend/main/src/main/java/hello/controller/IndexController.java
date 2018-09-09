@@ -13,7 +13,12 @@ public class IndexController {
 
     @GetMapping("/")
     public String page(HttpSession session) {
-        if (session.getAttribute("user") != null) return "";
+        if (session.getAttribute("user") != null) return "redirect:avia";
         return "redirect:login";
+    }
+
+    @GetMapping("/avia")
+    public String pageAvia() {
+        return "avia";
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Вход</title>
     <link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" id="bootstrap-css2">
     <script src="../static/js/bootstrap.min.js"></script>
@@ -18,7 +18,10 @@
         <div class="main-div">
             <div class="panel">
                 <h2>Tour Search</h2>
-                <p>Войдите в систему</p>
+                <div th:switch="${bad_password}">
+                    <p th:case="true" style="color: red">Неправильный пароль</p>
+                    <p th:case="*">Войдите в систему</p>
+                </div>
             </div>
             <form id="Login" action="/login" method="post">
                 <div class="form-group">
