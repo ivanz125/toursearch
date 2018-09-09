@@ -39,7 +39,7 @@ public class LoginController {
         if (user != null) {
             session.setAttribute("user", user);
             session.setAttribute("user_name", String.format("%s %s", user.getFirstName(), user.getLastName()));
-            session.setMaxInactiveInterval(60);
+            session.setMaxInactiveInterval(3600);
             return "redirect:avia";
         }
         model.addAttribute("bad_password", true);

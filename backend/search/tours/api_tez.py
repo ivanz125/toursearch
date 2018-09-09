@@ -1,4 +1,5 @@
 import requests
+from tours import utils
 
 
 def id_country_for_tez(code):
@@ -180,7 +181,7 @@ def get_results_page(resp, results, code_country, adults, children):
     for tour_orig in tours_resp:
         # time
         t = tour_orig[0]
-        time = "%s-%s-%s" % (t[0:2], t[3:5], t[6:10])
+        time = "%s-%s-%s" % (t[6:10], t[3:5], t[0:2])
 
         # hotel
         h = tour_orig[6]
@@ -206,7 +207,7 @@ def get_results_page(resp, results, code_country, adults, children):
 
         # create object
         tour = dict()
-        tour['country'] = code_country
+        tour['country'] = utils.country_name(code_country)
         tour['date_start'] = time
         tour['nights'] = tour_orig[3]
         tour['adults'] = adults

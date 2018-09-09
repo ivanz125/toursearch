@@ -75,3 +75,44 @@
         float: none;
     }
 }
+
+.price-tag {
+    float: right;
+    margin-top: 8px;
+    margin-right: 12px;
+}
+
+.tour-description-item {
+    margin-left: 8px;
+    margin-top: 6px;
+}
+
+.tour-description-item-text {
+    font-size: 11pt;
+    position: relative;
+    top: 1px;
+    margin-left: 8px;
+}
+
+.tour-header {
+    display: block;
+    font-weight: bolder;
+    font-size: 15pt;
+    color: #353535;
+}
+
+.tour-place {
+    font-size: 9pt;
+    margin-left: 8px;
+    margin-bottom: 12px;
+}
+
+.tour-image {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.tour-content {
+    max-width: calc(50vw - 350px);
+}
