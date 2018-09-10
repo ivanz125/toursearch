@@ -57,18 +57,6 @@ function restrictMaxNightsInput() {
     if (parseInt(inp.value) < value) inp.value = value;
 }
 
-function test() {
-    $.ajax({
-        url: "http://localhost:8080/api/tours/avia?meals=ai&adults=2&children=1&start_date_from=20180917&start_date_to=20180918&nights_min=6&nights_max=10&price_max=39990&code_country=eg"
-    }).then(function(data) {
-        // obj.hasOwnProperty('field')
-        var len = data.data.length;
-        for (var i = 0; i < len; i++) {
-            $('#tours-container').append(generateListItem(data.data[i]));
-        }
-    });
-}
-
 function loadTours() {
     if (minDate == undefined) minDate = moment().add(3, 'days').format('YYYYMMDD');
     if (maxDate == undefined) maxDate = moment().add(6, 'days').format('YYYYMMDD');
@@ -85,7 +73,6 @@ function loadTours() {
     requestUrl += '&start_date_from=' + minDate + '&start_date_to=' + maxDate + '&price_max=' + maxPrice;
     requestUrl += '&nights_min=' + minNights + '&nights_max=' + maxNights;
 
-    document.getElementById('search-button').class = "btn disabled";
     document.getElementById('search-label').style.display = 'block';
     $.ajax({
         url: requestUrl

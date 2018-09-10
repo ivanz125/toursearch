@@ -51,6 +51,7 @@ class QuotesSpider(scrapy.Spider):
             # link to tour page
             link_attr = item.css('div::attr(onclick)').extract()[0]
             link = 'http://selena-tour.com.ua' + link_attr[link_attr.find("'") + 1: link_attr.rfind("'")]
+            tour['url'] = link
 
             # print(tour)
             request = scrapy.Request(link, callback=self.parse_details)

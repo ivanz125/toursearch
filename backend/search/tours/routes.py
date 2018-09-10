@@ -4,6 +4,7 @@ from tours import api_tez
 from scr.spiders import spider_selena
 from flask import jsonify
 from flask import request
+from database import selena as selena_db
 
 
 @app.route('/')
@@ -36,5 +37,7 @@ def tours():
 
 @app.route('/bus')
 def bus_tours():
-    selena = spider_selena.QuotesSpider()
-    return jsonify(spider_selena.run_spider())
+    # selena = spider_selena.QuotesSpider()
+    # return jsonify(spider_selena.run_spider())
+    db = selena_db.Database()
+    return jsonify(db.get_all_tours())

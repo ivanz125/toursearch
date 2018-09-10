@@ -14,9 +14,13 @@ class Database:
 
     def get_all_tours(self):
         tours = self.tours_collection.find({})
-        result = list()
+        tours_list = list()
         for tour in tours:
             print(tour)
             tour.pop('_id', None)
-            result.append(tour)
+            tour.pop('description', None)
+            tours_list.append(tour)
+        result = dict()
+        result['count_items'] = len(tours_list)
+        result['data'] = tours_list
         return result
