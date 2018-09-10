@@ -15,6 +15,11 @@
     <link href="/css/avia.css" rel="stylesheet">
     <script src="../static/js/avia.js"></script>
     <script src="/js/avia.js"></script>
+    <!-- Calendar http://www.daterangepicker.com/ -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- -->
     <style>
         .navbar {
             margin-bottom: 0;
@@ -54,7 +59,78 @@
     </div>
 </nav>
 
-<div class="container" id="tours-container" style="width: 50vw">
+<div class="container" id="input-form-container" style="width: 50vw;">
+    <div class="card" style="margin-top: 20px; padding: 20px;">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputCountry">Страна</label>
+                    <select class="form-control" id="inputCountry">
+                        <option name="country-eg">Египет</option>
+                        <option name="country-tr">Турция</option>
+                        <option name="country-gr">Греция</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputDates">Дата заезда</label>
+                    <input type="text" class="form-control" id="inputDates" name="date_range">
+                    <script>$(function() {init_calendar();});</script>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Ночей</label>
+                    <div>
+                        <div class="col-form-label pr-md-2 float-left">От</div>
+                        <input class="form-control col-md-4 float-left" id="minNights" type="number" name="min-nights" value="5"
+                               onchange="restrictMaxNightsInput()">
+                        <div class="col-form-label px-md-2 float-left">до</div>
+                        <input class="form-control col-md-4 float-left" id="maxNights" type="number" name="max-nights" value="7">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="inputAdults">Взрослых</label>
+                    <select class="form-control" id="inputAdults">
+                        <option>1</option>
+                        <option selected>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputChildren">Детей</label>
+                    <select class="form-control" id="inputChildren">
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputMeals">Питание</label>
+                    <select class="form-control" id="inputMeals">
+                        <option name="meal-ro">Без питания</option>
+                        <option name="meal-bb">Только завтрак</option>
+                        <option name="meal-hb" selected>Завтрак и ужин</option>
+                        <option name="meal-fb">Завтрак, обед и ужин</option>
+                        <option name="meal-ai">Все включено</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputMaxPrice">Максимальная цена, грн</label>
+                    <input class="form-control" id="inputMaxPrice" type="number" name="max-price" value="25800">
+                </div>
+            </div>
+            <div class="form-row float-right">
+                <p id="search-label" style="display: none; margin-right: 10px; margin-top: 7px;">Идет поиск...</p>
+                <p class="btn btn-dark" id="search-button" onclick="loadTours()">Искать</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container" id="tours-container" style="width: 50vw; margin-bottom: 20px;">
     <div class="card flex-row flex-wrap" style="margin-top: 20px;">
         <div style="width: 300px; height: 200px; left: 0;">
             <div class="border-0">

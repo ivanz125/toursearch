@@ -1,3 +1,62 @@
+function init() {
+    init_calendar();
+}
+
+var minDate, maxDate;
+function init_calendar() {
+    $('input[name="date_range"]').daterangepicker({
+        "locale": {
+            "format": "DD.MM.YYYY",
+            "separator": " - ",
+            "applyLabel": "Выбрать",
+            "cancelLabel": "Отмена",
+            "fromLabel": "С",
+            "toLabel": "По",
+            "customRangeLabel": "Custom",
+            "weekLabel": "W",
+            "daysOfWeek": [
+                "Вс",
+                "Пн",
+                "Вт",
+                "Ср",
+                "Чт",
+                "Пт",
+                "Сб"
+            ],
+            "monthNames": [
+                "Январь",
+                "Февраль",
+                "Март",
+                "Апрель",
+                "Май",
+                "Июнь",
+                "Июль",
+                "Август",
+                "Сентябрь",
+                "Октябрь",
+                "Ноябрь",
+                "Декабрь"
+            ],
+            "firstDay": 1
+        },
+        "startDate": moment().add(3, 'days'),
+        "endDate": moment().add(6, 'days'),
+        "minDate": moment()
+    }, function(start, end, label) {
+        minDate = start.format('YYYYMMDD');
+        maxDate = end.format('YYYYMMDD');
+        console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+    });
+}
+
+function restrictMaxNightsInput() {
+    var value = parseInt(document.getElementById("minNights").value);
+    var inp = document.getElementById("maxNights");
+    inp.min = value;
+    inp.max = value + 8;
+    if (parseInt(inp.value) < value) inp.value = value;
+}
+
 function test() {
     $.ajax({
         url: "http://localhost:8080/api/tours/avia?meals=ai&adults=2&children=1&start_date_from=20180917&start_date_to=20180918&nights_min=6&nights_max=10&price_max=39990&code_country=eg"
@@ -10,8 +69,36 @@ function test() {
     });
 }
 
-test();
+function loadTours() {
+    if (minDate == undefined) minDate = moment().add(3, 'days').format('YYYYMMDD');
+    if (maxDate == undefined) maxDate = moment().add(6, 'days').format('YYYYMMDD');
+    var minNights = document.getElementById('minNights').value;
+    var maxNights = document.getElementById('maxNights').value;
+    var country = $('#inputCountry').find(":selected").attr('name').substr(8);
+    var adults = parseInt($('#inputAdults').find(":selected").text());
+    var children = $('#inputChildren').find(":selected").text();
+    var meals = $('#inputMeals').find(":selected").attr('name').substr(5);
+    var maxPrice = document.getElementById('inputMaxPrice').value;
 
+    var requestUrl = 'http://localhost:8080/api/tours/avia?';
+    requestUrl += 'meals=' + meals + '&adults=' + adults + '&children=' + children + '&code_country=' + country;
+    requestUrl += '&start_date_from=' + minDate + '&start_date_to=' + maxDate + '&price_max=' + maxPrice;
+    requestUrl += '&nights_min=' + minNights + '&nights_max=' + maxNights;
+
+    document.getElementById('search-button').class = "btn disabled";
+    document.getElementById('search-label').style.display = 'block';
+    $.ajax({
+        url: requestUrl
+    }).then(function(data) {
+        // obj.hasOwnProperty('field')
+        document.getElementById('tours-container').innerHTML = '';
+        document.getElementById('search-label').style.display = 'none';
+        var len = data.data.length;
+        for (var i = 0; i < len; i++) {
+            $('#tours-container').append(generateListItem(data.data[i]));
+        }
+    });
+}
 
 function getMealName(meal) {
     switch (meal.toLowerCase()) {
