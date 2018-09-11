@@ -26,7 +26,7 @@ class QuotesSpider(scrapy.Spider):
         for item in response.css('div.block_item'):
             tour = dict()
             tour['title'] = item.css('div')[4].xpath('normalize-space()').extract_first()
-            tour['price'] = item.css('div')[5].xpath('text()')[1].extract().strip()
+            tour['price'] = int(item.css('div')[5].xpath('text()')[1].extract().strip())
             # currency
             currency_site = item.css('div')[5].css('span::text')[1].extract().strip()
             tour['currency'] = currency_site_to_code(currency_site)

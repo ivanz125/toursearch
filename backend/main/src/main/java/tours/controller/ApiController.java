@@ -15,17 +15,17 @@ public class ApiController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/tours/avia", produces = "application/json")
-    public String greeting(@RequestParam(value="code_country") String codeCountry,
-                             @RequestParam(value = "start_date_from") String startDateFrom,
-                             @RequestParam(value = "start_date_to") String startDateTo,
-                             @RequestParam(value = "adults") int adults,
-                             @RequestParam(value = "children") int children,
-                             @RequestParam(value = "b_day_1", required = false) String bDay1,
-                             @RequestParam(value = "b_day_2", required = false) String bDay2,
-                             @RequestParam(value = "nights_min") int nightsMin,
-                             @RequestParam(value = "nights_max") int nightsMax,
-                             @RequestParam(value = "meals") String meals,
-                             @RequestParam(value = "price_max") int priceMax) {
+    public String greeting(@RequestParam(value = "code_country") String codeCountry,
+                           @RequestParam(value = "start_date_from") String startDateFrom,
+                           @RequestParam(value = "start_date_to") String startDateTo,
+                           @RequestParam(value = "adults") int adults,
+                           @RequestParam(value = "children") int children,
+                           @RequestParam(value = "b_day_1", required = false) String bDay1,
+                           @RequestParam(value = "b_day_2", required = false) String bDay2,
+                           @RequestParam(value = "nights_min") int nightsMin,
+                           @RequestParam(value = "nights_max") int nightsMax,
+                           @RequestParam(value = "meals") String meals,
+                           @RequestParam(value = "price_max") int priceMax) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
@@ -55,11 +55,27 @@ public class ApiController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/tours/bus", produces = "application/json")
-    public String busTours() {
+    public String busTours(@RequestParam(value = "start_date_from") String startDateFrom,
+                           @RequestParam(value = "start_date_to") String startDateTo,
+                           @RequestParam(value = "days_min") int daysMin,
+                           @RequestParam(value = "days_max") int daysMax,
+                           @RequestParam(value = "price_max") int priceMax,
+                           @RequestParam(value = "places_str", required = false) String places,
+                           @RequestParam(value = "places_mode", required = false) String placesMode) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/bus");
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/bus")
+                .queryParam("start_date_from", startDateFrom)
+                .queryParam("start_date_to", startDateTo)
+                .queryParam("days_min", daysMin)
+                .queryParam("days_max", daysMax)
+                .queryParam("price_max", priceMax);
+        if (places != null) {
+            System.out.println(places);
+            builder.queryParam("places_str", places);
+            if (placesMode != null) builder.queryParam("places_mode", placesMode);
+        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

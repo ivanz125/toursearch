@@ -1,3 +1,6 @@
+import datetime
+import requests
+
 def country_name(code):
     if code == 'bg':
         return 'Болгария'
@@ -50,3 +53,30 @@ def country_name(code):
     elif code == 'ee':
         return 'Эстония'
     return 'Неизвестная страна'
+
+
+def date_int_to_datetime(date):
+    day = date % 100
+    date //= 100
+    month = date % 100
+    date //= 100
+    return datetime.date(date, month, day)
+
+
+def uah_to_eur_rate(db):
+    rate = db.currencies.find_one({'pair': 'uah_eur'})
+    value = int()
+    if rate is None or datetime.datetime.now().timestamp() - rate['time'] > 1600:
+        resp = requests.get('https://free.currencyconverterapi.com/api/v6/convert?q=UAH_EUR&compact=ultra')
+        value = resp.json()['UAH_EUR']
+        db.currencies.delete_one({'pair': 'uah_eur'})
+        obj = {
+            'pair': 'uah_eur',
+            'rate': value,
+            'time': datetime.datetime.now().timestamp()
+        }
+        db.currencies.insert_one(obj)
+        print("UAH/EUR updated:", value)
+    else:
+        value = rate['rate']
+    return value

@@ -39,8 +39,8 @@ function init_calendar() {
             ],
             "firstDay": 1
         },
-        "startDate": moment().add(3, 'days'),
-        "endDate": moment().add(6, 'days'),
+        "startDate": moment().add(10, 'days'),
+        "endDate": moment().add(30, 'days'),
         "minDate": moment()
     }, function(start, end, label) {
         minDate = start.format('YYYYMMDD');
@@ -50,7 +50,19 @@ function init_calendar() {
 }
 
 function loadTours() {
-    var requestUrl = 'http://localhost:8080/api/tours/bus';
+    if (minDate == undefined) minDate = moment().add(10, 'days').format('YYYYMMDD');
+    if (maxDate == undefined) maxDate = moment().add(30, 'days').format('YYYYMMDD');
+    var minDays = document.getElementById('minDays').value;
+    var maxDays = document.getElementById('maxDays').value;
+    var places = document.getElementById('inputPlaces').value;
+    var places_mode = document.getElementById('placesRadio1').checked == true ? 'all' : 'one';
+    var maxPrice = document.getElementById('inputMaxPrice').value;
+
+    var requestUrl = 'http://localhost:8080/api/tours/bus?';
+    requestUrl += 'places_str=' + places + '&places_mode=' + places_mode;
+    requestUrl += '&start_date_from=' + minDate + '&start_date_to=' + maxDate + '&price_max=' + maxPrice;
+    requestUrl += '&days_min=' + minDays + '&days_max=' + maxDays;
+
     document.getElementById('search-label').style.display = 'block';
     $.ajax({
         url: requestUrl

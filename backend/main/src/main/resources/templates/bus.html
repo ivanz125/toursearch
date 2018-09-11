@@ -64,62 +64,35 @@
         <form>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="inputCountry">Страна</label>
-                    <select class="form-control" id="inputCountry">
-                        <option name="country-eg">Египет</option>
-                        <option name="country-tr">Турция</option>
-                        <option name="country-gr">Греция</option>
-                    </select>
+                    <label for="inputPlaces">Города, места (через запятую)</label>
+                    <input class="form-control" id="inputPlaces" type="text" name="places" placeholder="Краков, Берлин, ...">
+                    <div class="custom-control custom-radio" style="margin-top: 15px;">
+                        <input type="radio" id="placesRadio1" name="placesRadio" class="custom-control-input">
+                        <label class="custom-control-label" for="placesRadio1">Все места</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="placesRadio2" name="placesRadio" class="custom-control-input" checked>
+                        <label class="custom-control-label" for="placesRadio2">Хотя бы одно место</label>
+                    </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="inputDates">Дата заезда</label>
+                    <label for="inputDates">Дата начала</label>
                     <input type="text" class="form-control" id="inputDates" name="date_range">
                     <script>$(function() {init_calendar();});</script>
                 </div>
                 <div class="form-group col-md-4">
-                    <label>Ночей</label>
+                    <label>Дней</label>
                     <div>
                         <div class="col-form-label pr-md-2 float-left">От</div>
-                        <input class="form-control col-md-4 float-left" id="minNights" type="number" name="min-nights" value="5"
-                               onchange="restrictMaxNightsInput()">
+                        <input class="form-control col-md-4 float-left" id="minDays" type="number" name="min-days" value="3"
+                               onchange="restrictMaxDaysInput()">
                         <div class="col-form-label px-md-2 float-left">до</div>
-                        <input class="form-control col-md-4 float-left" id="maxNights" type="number" name="max-nights" value="7">
+                        <input class="form-control col-md-4 float-left" id="maxDays" type="number" name="max-days" value="10">
                     </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <label for="inputAdults">Взрослых</label>
-                    <select class="form-control" id="inputAdults">
-                        <option>1</option>
-                        <option selected>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-2">
-                    <label for="inputChildren">Детей</label>
-                    <select class="form-control" id="inputChildren">
-                        <option>0</option>
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="inputMeals">Питание</label>
-                    <select class="form-control" id="inputMeals">
-                        <option name="meal-ro">Без питания</option>
-                        <option name="meal-bb">Только завтрак</option>
-                        <option name="meal-hb" selected>Завтрак и ужин</option>
-                        <option name="meal-fb">Завтрак, обед и ужин</option>
-                        <option name="meal-ai">Все включено</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="inputMaxPrice">Максимальная цена, грн</label>
-                    <input class="form-control" id="inputMaxPrice" type="number" name="max-price" value="25800">
+                    <div class="form-group" style="margin-top: 50px;">
+                        <label for="inputMaxPrice">Максимальная цена, €</label>
+                        <input class="form-control" id="inputMaxPrice" type="number" name="max-price" value="200">
+                    </div>
                 </div>
             </div>
             <div class="form-row float-right">

@@ -5,6 +5,7 @@ from scr.spiders import spider_selena
 from flask import jsonify
 from flask import request
 from database import selena as selena_db
+from urllib.parse import unquote
 
 
 @app.route('/')
@@ -37,7 +38,28 @@ def tours():
 
 @app.route('/bus')
 def bus_tours():
-    # selena = spider_selena.QuotesSpider()
-    # return jsonify(spider_selena.run_spider())
+    start_date_from = request.args.get('start_date_from', default=0, type=int)
+    start_date_to = request.args.get('start_date_to', default=0, type=int)
+    days_min = request.args.get('days_min', default=4, type=int)
+    days_max = request.args.get('days_max', default=10, type=int)
+    price_max = request.args.get('price_max', default=0, type=int)
+    places = request.args.get('places_str', default='', type=str)
+    places_mode = request.args.get('places_mode', default='one', type=str)
+    update = request.args.get('update', default=False, type=bool)
+
+    places = unquote(places)
+    if update:
+        spider_selena.run_spider()
+    db = selena_db.Database()
+    t = db.get_tours(days_min, days_max, price_max, places, places_mode, start_date_from, start_date_to)
+    return jsonify(t)
+
+
+@app.route('/bus/all')
+def bus_tours_all():
+    update = request.args.get('update', default=False, type=bool)
+    if update:
+        return jsonify(spider_selena.run_spider())
     db = selena_db.Database()
     return jsonify(db.get_all_tours())
+

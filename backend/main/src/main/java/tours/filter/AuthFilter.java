@@ -19,7 +19,12 @@ public class AuthFilter extends GenericFilterBean {
         if ("POST".equals(req.getMethod())|| "/favicon.ico".equals(req.getServletPath()) || "/login".equals(req.getServletPath()) ||
                 req.getServletPath().startsWith("/css") || req.getServletPath().startsWith("/js") ||
                 req.getServletPath().startsWith("/static") || req.getServletPath().startsWith("/api")) {
-            filterChain.doFilter(servletRequest, servletResponse);
+            try {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+            catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
             return;
         }
 
