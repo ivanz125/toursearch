@@ -49,7 +49,9 @@ def get_results(code_country, start_date_from, start_date_to, adults, children, 
     resp = requests.get('http://www.tui.ua/api-agency/search/PriceList', params=params)
 
     tours_json = resp.json()
-    tours_resp = tours_json['SearchResult']['SearchResultItems']
+    tours_resp = list()
+    if 'SearchResult' in tours_json:
+        tours_resp = tours_json['SearchResult']['SearchResultItems']
     tours_list = list()
     for tour_orig in tours_resp:
         # time
@@ -82,7 +84,7 @@ def get_results(code_country, start_date_from, start_date_to, adults, children, 
         tours_list.append(tour)
 
     response = dict()
-    response['count_items'] = tours_json['SearchResult']['TotalItems']
+    response['count_items'] = len(tours_list)
     response['data'] = tours_list
     return response
     # return json.dumps(tours_list, ensure_ascii=False)

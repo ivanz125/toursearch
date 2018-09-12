@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from database import mongo
 from tours import utils
 import datetime
 
@@ -6,8 +6,7 @@ import datetime
 class Database:
 
     def __init__(self):
-        client = MongoClient('mongodb://localhost:27017/')
-        self.db = client.tours
+        self.db = mongo.client.tours
         self.tours_collection = self.db.tours_selena
 
     def clear_data(self):

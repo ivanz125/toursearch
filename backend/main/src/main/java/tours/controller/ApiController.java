@@ -15,7 +15,7 @@ public class ApiController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/tours/avia", produces = "application/json")
-    public String greeting(@RequestParam(value = "code_country") String codeCountry,
+    public String aviaTours(@RequestParam(value = "code_country") String codeCountry,
                            @RequestParam(value = "start_date_from") String startDateFrom,
                            @RequestParam(value = "start_date_to") String startDateTo,
                            @RequestParam(value = "adults") int adults,

@@ -160,7 +160,7 @@ def get_results(code_country, start_date_from, start_date_to, adults, children, 
         new_min_price = get_results_page(resp, results, code_country, adults, children)
         # no more items
         if new_min_price == 0:
-            continue
+            break
         # load next items
         params['priceMin'] = new_min_price
 

@@ -1,11 +1,11 @@
 from tours import app
-from tours import api_tui
-from tours import api_tez
 from scr.spiders import spider_selena
 from flask import jsonify
 from flask import request
 from database import selena as selena_db
 from urllib.parse import unquote
+from tours import tours_general
+from monitoring import monitoring
 
 
 @app.route('/')
@@ -23,16 +23,8 @@ def tours():
     meals = request.args.get('meals', default='bb', type=str)
     price_max = request.args.get('price_max', default=0, type=int)
 
-    results_tez = api_tez.get_results(code_country, start_date_from, start_date_to, adults, children, b_day_1, b_day_2,
-                                      nights_min, nights_max, meals, price_max)
-    results_tui = api_tui.get_results(code_country, start_date_from, start_date_to, adults, children,
-                                      nights_min, nights_max, meals, price_max)
-
-    results = dict()
-    results['count_items'] = results_tui['count_items'] + results_tez['count_items']
-    results['count_tui'] = results_tui['count_items']
-    results['count_tez'] = results_tez['count_items']
-    results['data'] = results_tui['data'] + results_tez['data']
+    results = tours_general.get_tours_avia(code_country, start_date_from, start_date_to, adults, children,
+                                        b_day_1, b_day_2, nights_min, nights_max, meals, price_max)
     return jsonify(results)
 
 
@@ -63,3 +55,16 @@ def bus_tours_all():
     db = selena_db.Database()
     return jsonify(db.get_all_tours())
 
+
+@app.route('/monitoring/execute')
+def execute_monitoring():
+    monitoring_id = request.args.get('id', default=0, type=int)
+    if monitoring_id == 0:
+        return jsonify({'error': 'No correct monitoring id provided (param "id")'})
+    return jsonify(monitoring.execute(monitoring_id))
+
+
+@app.route('/monitoring/create')
+def create_monitoring():
+    result = monitoring.create(request.args)
+    return jsonify({'result': result})
