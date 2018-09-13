@@ -1,20 +1,19 @@
 function init() {
-    loadMonitorings();
+    loadMonitoring();
 }
 
-function loadMonitorings() {
-    var userId = document.getElementById('userId').value;
+function loadMonitoring() {
+    var monitoringId = document.getElementById('monitoringId').value;
 
-    var requestUrl = 'http://localhost:8080/api/monitoring/get?user_id=' + userId;
+    var requestUrl = 'http://localhost:8080/api/monitoring/get_one?id=' + monitoringId;
     $.ajax({
         url: requestUrl
-    }).then(function(data) {
+    }).then(function(monitoring) {
         // obj.hasOwnProperty('field')
-        document.getElementById('tours-container').innerHTML = '';
-        var len = data.data.length;
-        for (var i = 0; i < len; i++) {
-            $('#tours-container').append(generateListItem(data.data[i]));
-        }
+        document.getElementById('tours-container').style.display = 'block';
+        setMonitoring(monitoring);
+    }).catch(function(data) {
+        alert('Ошибка. Обновите страницу.');
     });
 }
 
@@ -37,7 +36,7 @@ function getMealName(meal) {
     }
 }
 
-function generateListItem(monitoring) {
+function setMonitoring(monitoring) {
     var date1 = (monitoring.params.start_date_from + '').substring(6, 8)
         + '.' + (monitoring.params.start_date_from + '').substring(4, 6);
     var date2 = (monitoring.params.start_date_to + '').substring(6, 8)
@@ -57,6 +56,14 @@ function generateListItem(monitoring) {
     nights = n1 == n2 ? n1 + nights : n1 + ' - ' + n2 + nights;
     var meals = getMealName(monitoring.params.meals);
     var priceLimit = 'до ' + monitoring.params.price_limit + ' грн';
+
+    document.getElementById('monitoringName').innerHTML = monitoring.name;
+    document.getElementById('monitoringCountry').innerHTML = monitoring.country;
+    document.getElementById('monitoringDates').innerHTML = date;
+    document.getElementById('monitoringPeople').innerHTML = people;
+    document.getElementById('monitoringNights').innerHTML = nights;
+    document.getElementById('monitoringMeals').innerHTML = meals;
+    document.getElementById('monitoringPrice').innerHTML = priceLimit;
 
 
     var s = '<div class="card flex-row flex-wrap" style="margin-top: 20px;">';

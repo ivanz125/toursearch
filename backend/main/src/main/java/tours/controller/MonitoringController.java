@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import tours.model.Monitoring;
 import tours.repository.contract.MonitoringRepository;
 
+import javax.servlet.http.HttpSession;
 import java.nio.charset.Charset;
 import java.util.Date;
 
@@ -87,13 +88,55 @@ public class MonitoringController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get", produces = "application/json")
-    public String createAviaMonitoring(@RequestParam(value = "user_id") int userId) {
+    public String getMonitoringsByUser(@RequestParam(value = "user_id") int userId) {
         // Create monitoring object in MongoDB
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/monitoring/get")
                 .queryParam("user_id", userId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpEntity<String> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                String.class);
+        return response.getBody();
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get_one", produces = "application/json")
+    public String getOneMonitoring(@RequestParam(value = "id") int id) {
+        // Create monitoring object in MongoDB
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters()
+                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/monitoring/get_one")
+                .queryParam("id", id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpEntity<String> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                String.class);
+        return response.getBody();
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get_data", produces = "application/json")
+    public String getOneMonitoringData(@RequestParam(value = "id") int id) {
+        // Create monitoring object in MongoDB
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters()
+                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/monitoring/get_data")
+                .queryParam("id", id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

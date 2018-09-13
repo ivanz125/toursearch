@@ -36,7 +36,7 @@ public class MonitoringScheduler {
         this.monitoringRepository = monitoringRepository;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 60000)
     public void monitorings() {
         List<Monitoring> monitoringList = monitoringRepository.getAllActiveMonitorings();
         if (monitoringList == null) {

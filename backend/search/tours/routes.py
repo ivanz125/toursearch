@@ -77,3 +77,23 @@ def get_monitorings():
         return jsonify({'error': 'no user_id passed'})
     monitoring_list = monitoring.get(user_id)
     return jsonify({'count': len(monitoring_list), 'data': monitoring_list})
+
+
+@app.route('/monitoring/get_one')
+def get_one_monitoring():
+    _id = request.args.get('id', default=0, type=int)
+    # full = request.args.get('full', default=False, type=bool)
+    if _id == 0:
+        return jsonify({'error': 'no id passed'})
+    mon = monitoring.get_one(_id,)
+    return jsonify(mon)
+
+
+@app.route('/monitoring/get_data')
+def get_one_monitoring_data():
+    _id = request.args.get('id', default=0, type=int)
+    # full = request.args.get('full', default=False, type=bool)
+    if _id == 0:
+        return jsonify({'error': 'no id passed'})
+    mon = monitoring.get_data(_id,)
+    return jsonify(mon)

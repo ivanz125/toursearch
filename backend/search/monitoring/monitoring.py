@@ -103,3 +103,18 @@ def get(user_id):
         monitoring_list.append(monitoring)
     return monitoring_list
 
+
+def get_one(_id):
+    db = mongo.client.tours
+    monitoring = db.monitoring.find_one({"id": _id})
+    monitoring.pop('_id', None)
+    # monitoring.pop('results', None)
+    monitoring['country'] = utils.country_name(monitoring['params']['code_country'])
+    return monitoring
+
+
+def get_data(id):
+    db = mongo.client.tours
+    monitoring = db.monitoring.find_one({"id": id})
+    results = monitoring['results']
+    return results
