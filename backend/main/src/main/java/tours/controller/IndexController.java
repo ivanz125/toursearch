@@ -23,4 +23,9 @@ public class IndexController {
     public String pageBus() {
         return "bus";
     }
+
+    @GetMapping("/monitoring_list")
+    public String pageMonitoringList() {
+        return "monitoring_list";
+    }
 }

@@ -44,7 +44,7 @@
             </ul>
             <ul class="navbar-nav navbar-right">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:text="${session.user_name}"></a>
+                    <a class="nav-link" href="/monitoring_list" th:text="${session.user_name}"></a>
                     <input id="userId" type="hidden" th:value="${session.user.getId()}">
                 </li>
                 <li class="nav-item">
@@ -120,7 +120,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="inputMaxPrice">Максимальная цена, грн</label>
-                    <input class="form-control" id="inputMaxPrice" type="number" name="max-price" value="25800">
+                    <input class="form-control" id="inputMaxPrice" type="number" name="max-price" value="25800" step="1000">
                 </div>
             </div>
             <div class="form-row">
@@ -152,10 +152,16 @@
                     <br>Активен 1 неделю.</p>
                 <form>
                     <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="monitoringName">Название мониторинга</label>
+                            <input class="form-control" id="monitoringName" type="text" name="monitoring-name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="monitoringPriceLimit">Цена ниже (грн)</label>
                             <input class="form-control" id="monitoringPriceLimit" type="number"
-                                   step="1000" name="monitoring-price-limit" value="25800">
+                                   step="1000" name="monitoring-price-limit" value="26000">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputAdults">Интервал проверки</label>

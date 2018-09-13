@@ -149,6 +149,8 @@ function generateListItem(tour) {
 }
 
 function createMonitoring() {
+    var name = document.getElementById('monitoringName').value;
+    if (name == '') name = 'Monitoring';
     var priceLimit = parseInt(document.getElementById('monitoringPriceLimit').value);
     var interval = parseInt($('#inputCountry').find(":selected").attr('name').substr(9));
     switch (interval) {
@@ -165,7 +167,7 @@ function createMonitoring() {
     requestUrl += 'meals=' + meals + '&adults=' + adults + '&children=' + children + '&code_country=' + country;
     requestUrl += '&start_date_from=' + minDate + '&start_date_to=' + maxDate + '&price_max=' + maxPrice;
     requestUrl += '&nights_min=' + minNights + '&nights_max=' + maxNights;
-    requestUrl += '&interval=' + interval + '&user_id=' + userId + '&price_limit=' + priceLimit;
+    requestUrl += '&interval=' + interval + '&user_id=' + userId + '&price_limit=' + priceLimit + '&name=' + name;
 
     document.getElementById('monitoringModalMessage').innerHTML = 'Создание...';
     document.getElementById('monitoringModalMessage').style.display = 'block';

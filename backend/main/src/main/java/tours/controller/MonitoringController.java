@@ -40,7 +40,8 @@ public class MonitoringController {
                                        @RequestParam(value = "price_max") int priceMax,
                                        @RequestParam(value = "user_id") int userId,
                                        @RequestParam(value = "interval") int interval,
-                                       @RequestParam(value = "price_limit") int priceLimit) {
+                                       @RequestParam(value = "price_limit") int priceLimit,
+                                       @RequestParam(value = "name") String name) {
         // Create monitoring entry in MySQL DB
         Monitoring monitoring = new Monitoring();
         monitoring.setUserId(userId);
@@ -67,9 +68,32 @@ public class MonitoringController {
                 .queryParam("price_max", priceMax)
                 .queryParam("price_limit", priceLimit)
                 .queryParam("type", "avia")
-                .queryParam("id", id);
+                .queryParam("id", id)
+                .queryParam("user_id", userId)
+                .queryParam("name", name);
         if (children > 0 && bDay1 != null) builder.queryParam("b_day_1", bDay1);
         if (children > 1 && bDay2 != null) builder.queryParam("b_day_2", bDay2);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpEntity<String> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                String.class);
+        return response.getBody();
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get", produces = "application/json")
+    public String createAviaMonitoring(@RequestParam(value = "user_id") int userId) {
+        // Create monitoring object in MongoDB
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters()
+                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/monitoring/get")
+                .queryParam("user_id", userId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

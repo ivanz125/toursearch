@@ -1,6 +1,7 @@
 import datetime
 import requests
 
+
 def country_name(code):
     if code == 'bg':
         return 'Болгария'

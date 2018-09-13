@@ -68,3 +68,12 @@ def execute_monitoring():
 def create_monitoring():
     result = monitoring.create(request.args)
     return jsonify({'result': result})
+
+
+@app.route('/monitoring/get')
+def get_monitorings():
+    user_id = request.args.get('user_id', default=0, type=int)
+    if user_id == 0:
+        return jsonify({'error': 'no user_id passed'})
+    monitoring_list = monitoring.get(user_id)
+    return jsonify({'count': len(monitoring_list), 'data': monitoring_list})

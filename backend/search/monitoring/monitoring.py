@@ -1,6 +1,8 @@
 from database import mongo
 from tours import tours_general
 import datetime
+from tours import utils
+from urllib.parse import unquote
 
 
 def create(params):
@@ -17,12 +19,16 @@ def create(params):
     price_max = params.get('price_max', default=0, type=int)
     price_limit = params.get('price_limit', default=25000, type=int)
     monitoring_id = params.get('id', default=0, type=int)
+    user_id = params.get('user_id', default=0, type=int)
+    name = unquote(params.get('name', default='Monitoring', type=str))
     monitoring_type = params.get('type', default='', type=str)
     if monitoring_id == 0 or (monitoring_type != 'avia' and monitoring_type != 'bus'):
         return 0
 
     monitoring = dict()
     monitoring['id'] = monitoring_id
+    monitoring['user_id'] = user_id
+    monitoring['name'] = name
     monitoring['params'] = dict()
     monitoring['results'] = list()
     monitoring['params']['type'] = monitoring_type
@@ -82,3 +88,18 @@ def execute(monitoring_id):
 
         db.monitoring.update_one({"id": monitoring_id}, {"$set": monitoring})
         return {'results': len(passed), 'data': passed}
+
+
+def get(user_id):
+    db = mongo.client.tours
+    results = db.monitoring.find({"user_id": user_id})
+    monitoring_list = list()
+    for monitoring in results:
+        monitoring.pop('_id', None)
+        monitoring.pop('results', None)
+        monitoring['country'] = utils.country_name(monitoring['params']['code_country'])
+        # for res in monitoring['results']:
+        #    res.pop('results')
+        monitoring_list.append(monitoring)
+    return monitoring_list
+
