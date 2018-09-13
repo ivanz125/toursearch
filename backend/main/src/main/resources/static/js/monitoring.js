@@ -12,6 +12,8 @@ function loadMonitoring() {
         // obj.hasOwnProperty('field')
         document.getElementById('tours-container').style.display = 'block';
         setMonitoring(monitoring);
+        console.log(monitoring.results);
+        chart(monitoring.results);
     }).catch(function(data) {
         alert('Ошибка. Обновите страницу.');
     });
@@ -99,3 +101,72 @@ function setMonitoring(monitoring) {
     s += '</div>';
     return s;
 }
+
+function chart(data) {
+    var len = data.length;
+    if (len == 0) {
+        document.getElementById('priceChart').style.display = 'none';
+        return;
+    }
+    var newData = [];
+    var minPrice = 100000, maxPrice = 0;
+    for (var i = 0; i < len; i++) {
+        //var item = {"time": data[i].time, "tours": data[i].results_count};
+        var date = new Date(data[i].time * 1000);
+        var time = date.getDate().pad(2) + '.' + (date.getMonth()+1).pad(2) + ', ' + date.getHours().pad(2) + ':' + date.getMinutes().pad(2);
+        var item = {"time": time, "price": data[i].min_price};
+        minPrice = Math.min(data[i].min_price, minPrice);
+        maxPrice = Math.max(data[i].min_price, maxPrice);
+        newData.push(item);
+    }
+    var padding = (maxPrice - minPrice) / 8;
+    var bottom = Math.round((minPrice - padding) / 100) * 100;
+    var top = Math.round((maxPrice + padding) / 100) * 100;
+    var interval = (top - bottom) / 10;
+    console.log(newData);
+    console.log(minPrice + ' ' + maxPrice);
+
+    // prepare jqxChart settings
+    var settings = {
+        title: "Минимальная цена",
+        description: "График минимальной цены на туры с заданными параметрами от времени",
+        padding: { left: 5, top: 5, right: 50, bottom: 5 },
+        titlePadding: { left: 90, top: 0, right: 0, bottom: 10 },
+        source: newData,
+        categoryAxis:
+            {
+                dataField: 'time',
+                description: 'Время',
+                displayField: 'Время',
+                showGridLines: false
+            },
+        colorScheme: 'scheme01',
+        seriesGroups:
+            [
+                {
+                    type: 'line',
+                    columnsGapPercent: 30,
+                    seriesGapPercent: 0,
+                    valueAxis:
+                        {
+                            minValue: bottom,
+                            maxValue: top,
+                            unitInterval: interval,
+                            description: 'Минимальная цена'
+                        },
+                    series: [
+                        { dataField: 'price', displayText: 'Минимальная цена тура'}
+                    ]
+                }
+            ]
+    };
+
+    // select the chartContainer DIV element and render the chart.
+    $('#priceChart').jqxChart(settings);
+}
+
+Number.prototype.pad = function(size) {
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
+};

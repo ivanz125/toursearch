@@ -87,7 +87,7 @@ function generateListItem(monitoring) {
     s += '<div class="w-100"></div>';
         s += '<div class="align-middle card-footer w-100 text-muted">';
         s += '<a href="#" class="btn btn-danger">Отключить</a>';
-        s += '<a href="#" class="btn btn-dark" style="float: right;">Подробности</a>';
+        s += '<a href="/monitoring?id=' + parseInt(monitoring.id) + '" class="btn btn-dark" style="float: right;">Подробности</a>';
     s += '</div>';
     s += '</div>';
     return s;

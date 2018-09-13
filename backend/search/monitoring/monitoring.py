@@ -72,14 +72,18 @@ def execute(monitoring_id):
         price_max = monitoring['params']['price_max']
         price_limit = monitoring['params']['price_limit']
         results = tours_general.get_tours_avia(code_country, start_date_from, start_date_to, adults, children,
-                                               b_day_1, b_day_2, nights_min, nights_max, meals, price_max)
+                                               b_day_1, b_day_2, nights_min, nights_max, meals, 500000)
         data = results['data']
+        min_price = 0
+        if len(data) > 0:
+            min_price = data[0]['price']
         passed = list()
         for tour in data:
             if tour['price'] <= price_limit:
                 passed.append(tour)
         entry = dict()
         entry['time'] = datetime.datetime.now().timestamp()
+        entry['min_price'] = min_price
         entry['results_count'] = len(passed)
         entry['results'] = passed
         if 'results' not in monitoring:

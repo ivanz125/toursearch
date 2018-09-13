@@ -20,6 +20,23 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- -->
+
+    <!-- jQWidgets -->
+    <script type="text/javascript" src="../static/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxcore.js"></script>
+    <!-- add one or more widgets -->
+    <script type="text/javascript" src="../static/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxdraw.js"></script>
+    <script type="text/javascript" src="/jqwidgets/jqxchart.core.js"></script>
+    <script type="text/javascript" src="/scripts/demos.js"></script>
+    <!-- add the jQWidgets base styles and one of the theme stylesheets -->
+    <link rel="stylesheet" href="/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
+    <link rel="stylesheet" href="../static/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="../static/jqwidgets/styles/jqx.darkblue.css" type="text/css" />
+    <!-- -->
     <style>
         .navbar {
             margin-bottom: 0;
@@ -47,7 +64,7 @@
                     <a class="nav-link" href="">Мониторинг <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" th:text="${session.user_name}"></a>
+                    <a class="nav-link" href="/monitoring_list" th:text="${session.user_name}"></a>
                     <input id="userId" type="hidden" th:value="${session.user.getId()}">
                     <input id="monitoringId" type="hidden" th:value="${monitoring_id}">
                 </li>
@@ -103,9 +120,11 @@
         <div class="w-100"></div>
         <div class="align-middle card-footer w-100 text-muted">
             <a href="#" class="btn btn-danger">Отключить</a>
-            <a href="#" class="btn btn-dark" style="float: right;">Подробности</a>
+            <a href="#" class="btn btn-dark" style="float: right;">Удалить</a>
         </div>
     </div>
+
+    <div id="priceChart" style="width: 100%; height: 25vw; background-color: red; margin-top: 15px;"></div>
 </div>
 
 </body>
