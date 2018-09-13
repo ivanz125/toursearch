@@ -18,4 +18,9 @@ public class IndexController {
     public String pageAvia() {
         return "avia";
     }
+
+    @GetMapping("/bus")
+    public String pageBus() {
+        return "bus";
+    }
 }

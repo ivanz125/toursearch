@@ -1,7 +1,3 @@
-function init() {
-    init_calendar();
-}
-
 var minDate, maxDate;
 function init_calendar() {
     $('input[name="date_range"]').daterangepicker({

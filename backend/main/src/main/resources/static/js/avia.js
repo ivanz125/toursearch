@@ -1,8 +1,6 @@
-function init() {
-    init_calendar();
-}
-
 var minDate, maxDate;
+var minNights, maxNights, country, adults, children, meals, maxPrice;
+
 function init_calendar() {
     $('input[name="date_range"]').daterangepicker({
         "locale": {
@@ -60,13 +58,13 @@ function restrictMaxNightsInput() {
 function loadTours() {
     if (minDate == undefined) minDate = moment().add(3, 'days').format('YYYYMMDD');
     if (maxDate == undefined) maxDate = moment().add(6, 'days').format('YYYYMMDD');
-    var minNights = document.getElementById('minNights').value;
-    var maxNights = document.getElementById('maxNights').value;
-    var country = $('#inputCountry').find(":selected").attr('name').substr(8);
-    var adults = parseInt($('#inputAdults').find(":selected").text());
-    var children = $('#inputChildren').find(":selected").text();
-    var meals = $('#inputMeals').find(":selected").attr('name').substr(5);
-    var maxPrice = document.getElementById('inputMaxPrice').value;
+    minNights = document.getElementById('minNights').value;
+    maxNights = document.getElementById('maxNights').value;
+    country = $('#inputCountry').find(":selected").attr('name').substr(8);
+    adults = parseInt($('#inputAdults').find(":selected").text());
+    children = $('#inputChildren').find(":selected").text();
+    meals = $('#inputMeals').find(":selected").attr('name').substr(5);
+    maxPrice = document.getElementById('inputMaxPrice').value;
 
     var requestUrl = 'http://localhost:8080/api/tours/avia?';
     requestUrl += 'meals=' + meals + '&adults=' + adults + '&children=' + children + '&code_country=' + country;
@@ -80,6 +78,7 @@ function loadTours() {
         // obj.hasOwnProperty('field')
         document.getElementById('tours-container').innerHTML = '';
         document.getElementById('search-label').style.display = 'none';
+        document.getElementById('monitoring-button').style.display = 'inline-block';
         var len = data.data.length;
         for (var i = 0; i < len; i++) {
             $('#tours-container').append(generateListItem(data.data[i]));
@@ -142,9 +141,47 @@ function generateListItem(tour) {
     s += '</div>';
     s += '<div class="w-100"></div>';
         s += '<div class="align-middle card-footer w-100 text-muted">';
-        s += '<a href="' + tour.booking_url + '" class="btn btn-dark" style="float: right;">Бронировать</a>';
+        s += '<a href="' + tour.booking_url + '" class="btn btn-dark" target="_blank" style="float: right;">Бронировать</a>';
         s += '<h6 class="price-tag">' + parseInt(tour.price) + ' грн</h6>';
     s += '</div>';
     s += '</div>';
     return s;
+}
+
+function createMonitoring() {
+    var priceLimit = parseInt(document.getElementById('monitoringPriceLimit').value);
+    var interval = parseInt($('#inputCountry').find(":selected").attr('name').substr(9));
+    switch (interval) {
+        case 1: interval = 900; break;
+        case 2: interval = 1800; break;
+        case 3: interval = 3600; break;
+        case 4: interval = 10800; break;
+        case 5: interval = 21600; break;
+        default: interval = 28800; break;
+    }
+    var userId = parseInt(document.getElementById("userId").value);
+
+    var requestUrl = 'http://localhost:8080/api/monitoring/create/avia?';
+    requestUrl += 'meals=' + meals + '&adults=' + adults + '&children=' + children + '&code_country=' + country;
+    requestUrl += '&start_date_from=' + minDate + '&start_date_to=' + maxDate + '&price_max=' + maxPrice;
+    requestUrl += '&nights_min=' + minNights + '&nights_max=' + maxNights;
+    requestUrl += '&interval=' + interval + '&user_id=' + userId + '&price_limit=' + priceLimit;
+
+    document.getElementById('monitoringModalMessage').innerHTML = 'Создание...';
+    document.getElementById('monitoringModalMessage').style.display = 'block';
+    $.ajax({
+        url: requestUrl
+    }).then(function(data) {
+        // obj.hasOwnProperty('field')
+        document.getElementById('monitoringModalMessage').innerHTML = '<span style="color: green;">Мониторинг создан</span>';
+        setTimeout(function() {
+            document.getElementById('monitoringModalMessage').style.display = 'none';
+            $('#monitoringModal').modal('hide');
+        }, 1000);
+    }).catch(function(data) {
+        document.getElementById('monitoringModalMessage').innerHTML = '<span style="color: red;">Ошибка</span>';
+        setTimeout(function() {
+            document.getElementById('monitoringModalMessage').style.display = 'none';
+        }, 2000);
+    });
 }

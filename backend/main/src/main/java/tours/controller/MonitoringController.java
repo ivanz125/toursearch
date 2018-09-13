@@ -40,7 +40,6 @@ public class MonitoringController {
                                        @RequestParam(value = "price_max") int priceMax,
                                        @RequestParam(value = "user_id") int userId,
                                        @RequestParam(value = "interval") int interval,
-                                       @RequestParam(value = "expires") long expirationTime,
                                        @RequestParam(value = "price_limit") int priceLimit) {
         // Create monitoring entry in MySQL DB
         Monitoring monitoring = new Monitoring();
@@ -48,7 +47,7 @@ public class MonitoringController {
         monitoring.setActive(true);
         monitoring.setInterval(interval);
         Date exp = new Date();
-        exp.setTime(expirationTime);
+        exp.setTime(System.currentTimeMillis() + 604800000); // One week ahead
         monitoring.setExpires(exp);
         int id = monitoringRepository.createMonitoring(monitoring);
 
