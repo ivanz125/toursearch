@@ -47,7 +47,7 @@ public class MonitoringScheduler {
         for (Monitoring monitoring : monitoringList) {
             // null could be if executing monitoring for the first time
             // .before indicates that update time already passed and execution required
-            if (monitoring.getNextUpdate() == null || monitoring.getNextUpdate().before(new Date())) {
+            if (monitoring.getActive() && (monitoring.getNextUpdate() == null || monitoring.getNextUpdate().before(new Date()))) {
                 log.info("Executing monitoring: id=" + monitoring.getId());
                 // Execute (send request to search server)
                 RestTemplate restTemplate = new RestTemplate();

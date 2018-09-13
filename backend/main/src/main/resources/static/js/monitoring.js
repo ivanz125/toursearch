@@ -170,3 +170,20 @@ Number.prototype.pad = function(size) {
     while (s.length < (size || 2)) {s = "0" + s;}
     return s;
 };
+
+function active() {
+    var monitoringId = document.getElementById('monitoringId').value;
+    var active = document.getElementById('active_button').innerHTML != 'Отключить';
+
+    document.getElementById('active_button').innerHTML = 'Переключение...';
+    var requestUrl = 'http://localhost:8080/api/monitoring/set_active?id=' + monitoringId + '&active=' + active;
+    $.ajax({
+        url: requestUrl
+    }).then(function(data) {
+        document.getElementById('active_button').innerHTML = active ? 'Запустить' : 'Отключить';
+    }).catch(function(data) {
+        alert('Ошибка');
+        console.log(data);
+        document.getElementById('active_button').innerHTML = active ? 'Отключить' : 'Запустить';
+    });
+}

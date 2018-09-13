@@ -89,7 +89,6 @@ public class MonitoringController {
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get", produces = "application/json")
     public String getMonitoringsByUser(@RequestParam(value = "user_id") int userId) {
-        // Create monitoring object in MongoDB
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
@@ -110,7 +109,6 @@ public class MonitoringController {
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get_one", produces = "application/json")
     public String getOneMonitoring(@RequestParam(value = "id") int id) {
-        // Create monitoring object in MongoDB
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
@@ -131,7 +129,6 @@ public class MonitoringController {
     @CrossOrigin(origins = "*")
     @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/get_data", produces = "application/json")
     public String getOneMonitoringData(@RequestParam(value = "id") int id) {
-        // Create monitoring object in MongoDB
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
@@ -147,5 +144,13 @@ public class MonitoringController {
                 entity,
                 String.class);
         return response.getBody();
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(method = RequestMethod.GET, value = "api/monitoring/set_active", produces = "application/json")
+    public String setMonitoringActiveState(@RequestParam(value = "id") int id,
+                                           @RequestParam(value = "active") boolean active) {
+        monitoringRepository.setMonitoringActive(id, active);
+        return "{\"result\":1}";
     }
 }

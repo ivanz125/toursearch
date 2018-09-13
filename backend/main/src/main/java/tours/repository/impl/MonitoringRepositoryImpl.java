@@ -71,8 +71,13 @@ public class MonitoringRepositoryImpl implements MonitoringRepository {
         }
     }
 
+    @Transactional
     @Override
     public void setMonitoringActive(int monitoringId, boolean setActive) {
-
+        Query query = entityManager.createNativeQuery("UPDATE monitorings SET `active`=:n WHERE id=:id", Monitoring.class);
+        query.setParameter("id", monitoringId);
+        query.setParameter("n", setActive ? 1 : 0);
+        query.executeUpdate();
+        log.info("Updating monitoring active state: monitoring_id = " + monitoringId + ", set active: "+ setActive);
     }
 }
