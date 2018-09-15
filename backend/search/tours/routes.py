@@ -85,7 +85,7 @@ def get_one_monitoring():
     # full = request.args.get('full', default=False, type=bool)
     if _id == 0:
         return jsonify({'error': 'no id passed'})
-    mon = monitoring.get_one(_id,)
+    mon = monitoring.get_one(_id)
     return jsonify(mon)
 
 
@@ -95,5 +95,14 @@ def get_one_monitoring_data():
     # full = request.args.get('full', default=False, type=bool)
     if _id == 0:
         return jsonify({'error': 'no id passed'})
-    mon = monitoring.get_data(_id,)
+    mon = monitoring.get_data(_id)
     return jsonify(mon)
+
+
+@app.route('/monitoring/delete')
+def delete_monitoring():
+    _id = request.args.get('id', default=0, type=int)
+    if _id == 0:
+        return jsonify({'error': 'no id passed'})
+    monitoring.delete(_id)
+    return jsonify({'result': 1})

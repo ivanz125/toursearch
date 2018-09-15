@@ -160,12 +160,35 @@ function active() {
         mon.active = active;
     }).catch(function(data) {
         console.log(data);
-        document.getElementById('activeButtonLabel').innerHTML = 'Ошибка...';
+        document.getElementById('activeButtonLabel').innerHTML = 'Ошибка';
         setTimeout(function(){
             document.getElementById('activeButtonLabel').style.display = 'none';
             document.getElementById('activeButtonLabel').innerHTML = 'Переключение...';
         }, 2000);
         document.getElementById('active_button').innerHTML = active ? 'Включить' : 'Отключить';
         document.getElementById('active_button').class = active ? 'btn btn-success' : 'btn btn-danger';
+    });
+}
+
+function remove() {
+    var monitoringId = document.getElementById('monitoringId').value;
+
+    document.getElementById('activeButtonLabel').style.display = 'inline-block';
+    document.getElementById('activeButtonLabel').innerHTML = 'Удаление...';
+    var requestUrl = 'http://localhost:8080/api/monitoring/delete?id=' + monitoringId;
+    $.ajax({
+        url: requestUrl,
+        method: 'DELETE'
+    }).then(function(data) {
+        document.getElementById('activeButtonLabel').style.display = 'none';
+        document.getElementById('activeButtonLabel').innerHTML = 'Переключение...';
+        window.location.replace("/monitoring_list");
+    }).catch(function(data) {
+        console.log(data);
+        document.getElementById('activeButtonLabel').innerHTML = 'Ошибка';
+        setTimeout(function(){
+            document.getElementById('activeButtonLabel').style.display = 'none';
+            document.getElementById('activeButtonLabel').innerHTML = 'Переключение...';
+        }, 2000);
     });
 }

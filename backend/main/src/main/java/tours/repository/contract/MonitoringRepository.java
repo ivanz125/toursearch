@@ -14,4 +14,5 @@ public interface MonitoringRepository {
     int createMonitoring(Monitoring monitoring);
     void updateMonitoringUpdateTime(Monitoring monitoring);
     void setMonitoringActive(int monitoringId, boolean setActive);
+    void deleteMonitoring(int id);
 }

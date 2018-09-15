@@ -87,4 +87,13 @@ public class MonitoringRepositoryImpl implements MonitoringRepository {
         query.executeUpdate();
         log.info("Updating monitoring active state: monitoring_id = " + monitoringId + ", set active: "+ setActive);
     }
+
+    @Transactional
+    @Override
+    public void deleteMonitoring(int id) {
+        Query query = entityManager.createNativeQuery("DELETE FROM monitorings WHERE id=:id", Monitoring.class);
+        query.setParameter("id", id);
+        query.executeUpdate();
+        log.info("Deleting monitoring: monitoring_id = " + id);
+    }
 }

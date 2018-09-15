@@ -61,7 +61,7 @@
             </ul>
             <ul class="navbar-nav navbar-right">
                 <li class="nav-item active">
-                    <a class="nav-link" href="">Мониторинг <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/monitoring_list">Мониторинг <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/monitoring_list" th:text="${session.user_name}"></a>
@@ -123,7 +123,7 @@
                 <span id="active_button" class="btn btn-danger" onclick="active()">Отключить</span>
             </span>
             <span id="activeButtonLabel" style="padding-top: 4px; margin-left: 4px; display: none;">Переключение...</span>
-            <span class="btn btn-dark" style="float: right;">Удалить</span>
+            <span class="btn btn-dark" style="float: right;" onclick="remove()">Удалить</span>
         </div>
     </div>
 

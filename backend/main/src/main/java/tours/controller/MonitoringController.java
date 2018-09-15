@@ -169,6 +169,28 @@ public class MonitoringController {
         return "{\"result\":1}";
     }
 
+    @CrossOrigin(origins = "*")
+    @RequestMapping(method = RequestMethod.DELETE, value = "api/monitoring/delete", produces = "application/json")
+    public String deleteMonitoring(@RequestParam(value = "id") int id) {
+        monitoringRepository.deleteMonitoring(id);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters()
+                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/monitoring/delete")
+                .queryParam("id", id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpEntity<String> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                String.class);
+
+        return response.getBody();
+    }
+
     private String addActiveField(String monitoringStr) {
         ObjectMapper mapper = new ObjectMapper();
         try {

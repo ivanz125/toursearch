@@ -117,8 +117,13 @@ def get_one(_id):
     return monitoring
 
 
-def get_data(id):
+def get_data(_id):
     db = mongo.client.tours
-    monitoring = db.monitoring.find_one({"id": id})
+    monitoring = db.monitoring.find_one({"id": _id})
     results = monitoring['results']
     return results
+
+
+def delete(_id):
+    db = mongo.client.tours
+    monitoring = db.monitoring.delete_one({"id": _id})
