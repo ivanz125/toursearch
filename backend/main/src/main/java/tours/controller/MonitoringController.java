@@ -1,5 +1,9 @@
 package tours.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import tours.model.Monitoring;
 import tours.repository.contract.MonitoringRepository;
 
-import javax.servlet.http.HttpSession;
 import java.nio.charset.Charset;
 import java.util.Date;
 
@@ -103,7 +106,19 @@ public class MonitoringController {
                 HttpMethod.GET,
                 entity,
                 String.class);
-        return response.getBody();
+
+        // Parse array
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(response.getBody());
+            ArrayNode array = (ArrayNode) root.get("data");
+            for (JsonNode o : array) addActiveField(o);
+            return root.toString();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return response.getBody();
+        }
     }
 
     @CrossOrigin(origins = "*")
@@ -123,7 +138,7 @@ public class MonitoringController {
                 HttpMethod.GET,
                 entity,
                 String.class);
-        return response.getBody();
+        return addActiveField(response.getBody());
     }
 
     @CrossOrigin(origins = "*")
@@ -152,5 +167,29 @@ public class MonitoringController {
                                            @RequestParam(value = "active") boolean active) {
         monitoringRepository.setMonitoringActive(id, active);
         return "{\"result\":1}";
+    }
+
+    private String addActiveField(String monitoringStr) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = mapper.readTree(monitoringStr);
+            boolean isActive = monitoringRepository.getMonitoring(jsonNode.get("id").asInt()).getActive();
+            ((ObjectNode) jsonNode).put("active", isActive);
+            return jsonNode.toString();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    private void addActiveField(JsonNode monitoring) {
+        try {
+            boolean isActive = monitoringRepository.getMonitoring(monitoring.get("id").asInt()).getActive();
+            ((ObjectNode) monitoring).put("active", isActive);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

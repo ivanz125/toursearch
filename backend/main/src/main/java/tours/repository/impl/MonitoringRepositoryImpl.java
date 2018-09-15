@@ -36,6 +36,13 @@ public class MonitoringRepositoryImpl implements MonitoringRepository {
         return query.getResultList();
     }
 
+    @Override
+    public Monitoring getMonitoring(int id) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM monitorings WHERE id=:id", Monitoring.class);
+        query.setParameter("id", id);
+        return (Monitoring) query.getSingleResult();
+    }
+
     @Transactional
     @Override
     public int createMonitoring(Monitoring monitoring) {

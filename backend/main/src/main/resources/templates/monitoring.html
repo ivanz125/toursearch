@@ -119,12 +119,15 @@
         </div>
         <div class="w-100"></div>
         <div class="align-middle card-footer w-100 text-muted">
-            <a id="active_button" href="" class="btn btn-danger">Отключить</a>
-            <a href="#" class="btn btn-dark" style="float: right;">Удалить</a>
+            <span id="activeButtonContainer">
+                <span id="active_button" class="btn btn-danger" onclick="active()">Отключить</span>
+            </span>
+            <span id="activeButtonLabel" style="padding-top: 4px; margin-left: 4px; display: none;">Переключение...</span>
+            <span class="btn btn-dark" style="float: right;">Удалить</span>
         </div>
     </div>
 
-    <div id="priceChart" style="width: 100%; height: 25vw; background-color: red; margin-top: 15px;"></div>
+    <div id="priceChart" style="width: 100%; height: 25vw; margin-top: 15px;"></div>
 </div>
 
 </body>

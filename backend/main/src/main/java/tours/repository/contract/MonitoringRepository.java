@@ -10,6 +10,7 @@ import java.util.List;
 public interface MonitoringRepository {
     List<Monitoring> getAllActiveMonitorings();
     List<Monitoring> getMonitoringsByUser(int userId);
+    Monitoring getMonitoring(int id);
     int createMonitoring(Monitoring monitoring);
     void updateMonitoringUpdateTime(Monitoring monitoring);
     void setMonitoringActive(int monitoringId, boolean setActive);
