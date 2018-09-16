@@ -16,7 +16,9 @@ public class AuthFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
-        if ("POST".equals(req.getMethod())|| "/favicon.ico".equals(req.getServletPath()) || "/login".equals(req.getServletPath()) ||
+        if ("POST".equals(req.getMethod())|| "/favicon.ico".equals(req.getServletPath())
+                || "/login".equals(req.getServletPath()) || "/register".equals(req.getServletPath()) ||
+                "/registration".equals(req.getServletPath()) ||
                 req.getServletPath().startsWith("/css") || req.getServletPath().startsWith("/js") ||
                 req.getServletPath().startsWith("/static") || req.getServletPath().startsWith("/api")) {
             try {

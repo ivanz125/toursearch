@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" id="bootstrap-css2">
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/md5.js"></script>
+    <script src="/js/md5.js"></script>
+    <script src="../static/js/register.js"></script>
+    <script src="/js/register.js"></script>
+    <link href="../static/css/register.css" rel="stylesheet">
+    <link href="/css/register.css" rel="stylesheet">
+</head>
+<body id="LoginForm">
+<div class="container">
+    <div class="login-form">
+        <div class="main-div">
+            <div class="panel">
+                <h2>Tour Search</h2>
+                <div th:switch="${error}">
+                    <p th:case="2" style="color: red">Ошибка</p>
+                    <p th:case="1" style="color: red">Такой email уже зарегистрирован</p>
+                    <p th:case="*">Регистрация</p>
+                </div>
+            </div>
+            <form id="Register">
+                <div class="form-group">
+                    <input id="firstName" type="text" required class="form-control" placeholder="Имя">
+                </div>
+                <div class="form-group">
+                    <input id="lastName" type="text" required class="form-control" placeholder="Фамилия">
+                </div>
+                <div class="form-group">
+                    <input id="email" type="email" required class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input id="password" type="password" required class="form-control" placeholder="Пароль">
+                </div>
+                <div class="form-group">
+                    <input id="passwordRepeat" type="password" required class="form-control" placeholder="Повторите пароль">
+                </div>
+                <div class="register">
+                    <a href="/login">Вход</a>
+                </div>
+                <span class="btn btn-primary" onclick="register()">Зарегистрироваться</span>
+            </form>
+        </div>
+    </div></div>
+</body>
+</html>

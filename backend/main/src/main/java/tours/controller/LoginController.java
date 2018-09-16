@@ -45,4 +45,31 @@ public class LoginController {
         model.addAttribute("bad_password", true);
         return "login";
     }
+
+    @GetMapping("/register")
+    public String register() {
+        return "registration";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestParam(name="first_name") String firstName,
+                               @RequestParam(name="last_name") String lastName,
+                               @RequestParam(name="email") String email,
+                               @RequestParam(name="password") String password,
+                               HttpSession session,
+                               Model model) {
+        User user = userRepository.registerUser(firstName, lastName, email, password);
+        if (user != null && user.getId() == -1) {
+            model.addAttribute("error", 1);
+            return "registration";
+        }
+        if (user == null) {
+            model.addAttribute("error", 2);
+            return "registration";
+        }
+        session.setAttribute("user", user);
+        session.setAttribute("user_name", String.format("%s %s", user.getFirstName(), user.getLastName()));
+        session.setMaxInactiveInterval(3600);
+        return "redirect:avia";
+    }
 }
