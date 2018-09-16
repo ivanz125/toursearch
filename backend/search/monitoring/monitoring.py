@@ -91,7 +91,7 @@ def execute(monitoring_id):
         monitoring['results'].append(entry)
 
         db.monitoring.update_one({"id": monitoring_id}, {"$set": monitoring})
-        return {'results': len(passed), 'data': passed}
+        return {'name': monitoring['name'], 'results': len(passed), 'data': passed}
 
 
 def get(user_id):

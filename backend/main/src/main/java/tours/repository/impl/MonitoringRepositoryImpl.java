@@ -64,8 +64,11 @@ public class MonitoringRepositoryImpl implements MonitoringRepository {
     @Transactional
     @Override
     public void updateMonitoringUpdateTime(Monitoring monitoring) {
-        if (monitoring.getNextUpdate() == null) monitoring.setNextUpdate(new Date());
-        monitoring.getNextUpdate().setTime(System.currentTimeMillis() - 1000);
+        Date now = new Date();
+        if (monitoring.getNextUpdate() == null) {
+            monitoring.setNextUpdate(now);
+            monitoring.getNextUpdate().setTime(now.getTime() - 10000);
+        }
         if (monitoring.getNextUpdate().before(new Date())) {
             long millis = monitoring.getInterval() * 1000 + monitoring.getNextUpdate().getTime();
             monitoring.getNextUpdate().setTime(millis);
@@ -74,6 +77,17 @@ public class MonitoringRepositoryImpl implements MonitoringRepository {
             query.setParameter("n", monitoring.getNextUpdate());
             query.executeUpdate();
             log.info("Updating monitoring next update time: monitoring_id = " + monitoring.getId() +
+                    ", time: "+ dateFormat.format(monitoring.getNextUpdate()));
+        }
+        if (monitoring.getNextEmail() == null || monitoring.getNextEmail().before(new Date())) {
+            if (monitoring.getNextEmail() == null) monitoring.setNextEmail(new Date());
+            long next = monitoring.getNextEmail().getTime() + 28800000;
+            monitoring.getNextEmail().setTime(next);
+            Query query = entityManager.createNativeQuery("UPDATE monitorings SET `next_email`=:n WHERE id=:id", Monitoring.class);
+            query.setParameter("id", monitoring.getId());
+            query.setParameter("n", monitoring.getNextEmail());
+            query.executeUpdate();
+            log.info("Updating monitoring next email time: monitoring_id = " + monitoring.getId() +
                     ", time: "+ dateFormat.format(monitoring.getNextUpdate()));
         }
     }

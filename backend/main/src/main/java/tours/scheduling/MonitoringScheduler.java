@@ -14,8 +14,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import tours.email.EmailService;
 import tours.model.Monitoring;
+import tours.model.User;
 import tours.repository.contract.MonitoringRepository;
+import tours.repository.contract.UserRepository;
 
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
@@ -30,10 +33,14 @@ public class MonitoringScheduler {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     private MonitoringRepository monitoringRepository;
+    private UserRepository userRepository;
+    private EmailService emailService;
 
     @Autowired
-    public MonitoringScheduler(MonitoringRepository monitoringRepository) {
+    public MonitoringScheduler(MonitoringRepository monitoringRepository, UserRepository userRepository, EmailService emailService) {
         this.monitoringRepository = monitoringRepository;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Scheduled(fixedRate = 60000)
@@ -44,10 +51,11 @@ public class MonitoringScheduler {
             return;
         }
 
+        Date now = new Date();
         for (Monitoring monitoring : monitoringList) {
             // null could be if executing monitoring for the first time
             // .before indicates that update time already passed and execution required
-            if (monitoring.getActive() && (monitoring.getNextUpdate() == null || monitoring.getNextUpdate().before(new Date()))) {
+            if (monitoring.getActive() && (monitoring.getNextUpdate() == null || monitoring.getNextUpdate().before(now))) {
                 log.info("Executing monitoring: id=" + monitoring.getId());
                 // Execute (send request to search server)
                 RestTemplate restTemplate = new RestTemplate();
@@ -73,6 +81,13 @@ public class MonitoringScheduler {
                         String msg = String.format("Monitoring id=%d executed. Results count: %d.", monitoring.getId(), resultsCount);
                         if (node.has("error")) msg += String.format(" Error: %s", node.get("error").asText());
                         log.info(msg);
+
+                        // Send email if required
+                        if (monitoring.getNextEmail() == null || monitoring.getNextEmail().before(now) && resultsCount > 0) {
+                            User user = userRepository.getUserById(monitoring.getUserId());
+                            String name = node.has("name") ? node.get("name").asText() : "Unknown";
+                            emailService.sendMessage(user.getEmail(), name, resultsCount);
+                        }
                     }
                 }
                 catch (Exception ex) {
@@ -83,5 +98,10 @@ public class MonitoringScheduler {
                 monitoringRepository.updateMonitoringUpdateTime(monitoring);
             }
         }
+    }
+
+    @Scheduled(fixedRate = 600000)
+    public void emails() {
+
     }
 }

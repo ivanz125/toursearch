@@ -32,6 +32,15 @@ public class UserRepositoryImpl implements UserRepository {
         return (User) users.get(0);
     }
 
+    @Override
+    public User getUserById(int id) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM users WHERE id=:uid", User.class);
+        query.setParameter("uid", id);
+        List users = query.getResultList();
+        if (users == null || users.size() == 0) return null;
+        return (User) users.get(0);
+    }
+
     @Transactional
     @Override
     public User registerUser(String firstName, String lastName, String email, String passwordMd5) {

@@ -20,6 +20,8 @@ public class Monitoring {
 
     private Date expires;
 
+    private Date nextEmail;
+
     public Integer getId() {
         return id;
     }
@@ -66,5 +68,13 @@ public class Monitoring {
 
     public void setExpires(Date expires) {
         this.expires = expires;
+    }
+
+    public Date getNextEmail() {
+        return nextEmail;
+    }
+
+    public void setNextEmail(Date nextEmail) {
+        this.nextEmail = nextEmail;
     }
 }
