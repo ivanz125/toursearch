@@ -26,9 +26,9 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class MonitoringScheduler {
+public class MainScheduler {
 
-    private static final Logger log = LoggerFactory.getLogger(MonitoringScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(MainScheduler.class);
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -37,13 +37,13 @@ public class MonitoringScheduler {
     private EmailService emailService;
 
     @Autowired
-    public MonitoringScheduler(MonitoringRepository monitoringRepository, UserRepository userRepository, EmailService emailService) {
+    public MainScheduler(MonitoringRepository monitoringRepository, UserRepository userRepository, EmailService emailService) {
         this.monitoringRepository = monitoringRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000) // Each minute
     public void monitorings() {
         List<Monitoring> monitoringList = monitoringRepository.getAllActiveMonitorings();
         if (monitoringList == null) {
@@ -100,8 +100,22 @@ public class MonitoringScheduler {
         }
     }
 
-    @Scheduled(fixedRate = 600000)
-    public void emails() {
+    @Scheduled(fixedRate = 28800000) // Each 8 hours
+    public void scrapping() {
+        log.info("Starting bus tours scrapping");
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters()
+                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://127.0.0.1:5000/bus/update");
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        HttpEntity<String> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                String.class);
+        log.info("Bus tours scrapping: " + response.getBody());
     }
 }

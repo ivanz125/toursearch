@@ -54,6 +54,12 @@ class Database:
             tour.pop('_id', None)
         return tour
 
+    def restore_tours(self, backup):
+        print('Restoring tours')
+        for doc in backup:
+            doc.pop('_id', None)
+        self.tours_collection.insert_many(backup)
+
 
 def check_places_one(places_str, tour_places):
     places = places_str.split(',')

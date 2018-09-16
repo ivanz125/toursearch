@@ -3,11 +3,9 @@ package tours.repository.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import tours.model.Monitoring;
 import tours.model.User;
 import tours.repository.contract.UserRepository;
 import org.springframework.stereotype.Repository;
-import tours.scheduling.MonitoringScheduler;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

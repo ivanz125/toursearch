@@ -116,6 +116,7 @@ def run_spider():
     # configure_logging({'LOG_LEVEL': 'INFO'})
     configure_logging()
     db = selena_db.Database()
+    backup = db.get_all_tours()['data']
     db.clear_data()
 
     q = Queue()
@@ -125,6 +126,11 @@ def run_spider():
     p.join()
 
     if result is not None:
+        db.restore_tours(backup)
         raise result
 
-    return db.get_all_tours()
+    res = db.get_all_tours()
+    if ('count_items' not in res) or (res['count_items'] == 0):
+        db.restore_tours(backup)
+        return {'result': 0}
+    return {'result': 1}

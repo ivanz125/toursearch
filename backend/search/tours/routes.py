@@ -37,11 +37,8 @@ def bus_tours():
     price_max = request.args.get('price_max', default=0, type=int)
     places = request.args.get('places_str', default='', type=str)
     places_mode = request.args.get('places_mode', default='one', type=str)
-    update = request.args.get('update', default=False, type=bool)
 
     places = unquote(places)
-    if update:
-        spider_selena.run_spider()
     db = selena_db.Database()
     t = db.get_tours(days_min, days_max, price_max, places, places_mode, start_date_from, start_date_to)
     return jsonify(t)
@@ -49,11 +46,14 @@ def bus_tours():
 
 @app.route('/bus/all')
 def bus_tours_all():
-    update = request.args.get('update', default=False, type=bool)
-    if update:
-        return jsonify(spider_selena.run_spider())
     db = selena_db.Database()
     return jsonify(db.get_all_tours())
+
+
+@app.route('/bus/update')
+def bus_tours_update():
+    res = spider_selena.run_spider()
+    return jsonify(res)
 
 
 @app.route('/bus/get_one')
