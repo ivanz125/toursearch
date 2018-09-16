@@ -88,7 +88,7 @@ public class MonitoringRepositoryImpl implements MonitoringRepository {
             query.setParameter("n", monitoring.getNextEmail());
             query.executeUpdate();
             log.info("Updating monitoring next email time: monitoring_id = " + monitoring.getId() +
-                    ", time: "+ dateFormat.format(monitoring.getNextUpdate()));
+                    ", time: "+ dateFormat.format(monitoring.getNextEmail()));
         }
     }
 

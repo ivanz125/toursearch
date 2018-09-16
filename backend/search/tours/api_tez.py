@@ -195,7 +195,8 @@ def get_results_page(resp, results, code_country, adults, children):
 
         # booking url
         base_url = tour_orig[11][0][0]
-        dep_city = tours_json['departureCityId']
+        # dep_city = tours_json.get('departureCityId', default=3667)
+        dep_city = 3667
         date_from = tour_orig[0]
         night_count = tour_orig[3]
         hotel_u = h[3]
