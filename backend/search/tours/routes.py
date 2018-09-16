@@ -56,6 +56,13 @@ def bus_tours_all():
     return jsonify(db.get_all_tours())
 
 
+@app.route('/bus/get_one')
+def bus_tours_one():
+    url = request.args.get('url', default='', type=str)
+    db = selena_db.Database()
+    return jsonify(db.get_one_tour(url))
+
+
 @app.route('/monitoring/execute')
 def execute_monitoring():
     monitoring_id = request.args.get('id', default=0, type=int)

@@ -105,9 +105,42 @@ function generateListItem(tour) {
     s += '</div>';
     s += '<div class="w-100"></div>';
         s += '<div class="align-middle card-footer w-100 text-muted">';
-        s += '<a href="' + tour.url + '" class="btn btn-dark" style="float: right;">Подробнее</a>';
+        //s += '<a href="' + tour.url + '" class="btn btn-dark" style="float: right;">Подробнее</a>';
+        s += '<a href="/bus" class="btn btn-dark" onclick="loadDescription(\'' + tour.url + '\');" disabled="true" style="float: right;"  data-toggle="modal" data-target="#descriptionModal">Подробнее</a>';
         s += '<h6 class="price-tag">' + price + '</h6>';
     s += '</div>';
     s += '</div>';
+    return s;
+}
+
+function loadDescription(tour_url) {
+    var requestUrl = 'http://localhost:8080/api/tours/bus/get_one?url=' + tour_url;
+    $.ajax({
+        url: requestUrl
+    }).then(function(data) {
+        document.getElementById('modalBody').innerHTML = generateModalBody(data.description, data.dates);
+        document.getElementById('monitoringGoButton').onclick = function() {
+            var win = window.open(tour_url, '_blank');
+            win.focus();
+        }
+    }).catch(function(data) {
+        console.log(data);
+    });
+}
+
+function generateModalBody(description, dates) {
+    var len = description.length;
+    var s = '';
+    for (var i = 0; i < len; i++) {
+        s += '<h5>' + description[i].header + '</h5>';
+        s += '<p>' + description[i].content + '</p>';
+        s += '<br>';
+    }
+    s += '<h6>Даты выездов:</h6><ul>';
+    len = dates.length;
+    for (var i = 0; i < len; i++) {
+        s += '<li>' + dates[i] + '</li>';
+    }
+    s += '</ul>';
     return s;
 }

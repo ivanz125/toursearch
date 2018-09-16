@@ -48,6 +48,12 @@ class Database:
         result['data'] = tours_list
         return result
 
+    def get_one_tour(self, url):
+        tour = self.tours_collection.find_one({'url': url})
+        if tour is not None:
+            tour.pop('_id', None)
+        return tour
+
 
 def check_places_one(places_str, tour_places):
     places = places_str.split(',')

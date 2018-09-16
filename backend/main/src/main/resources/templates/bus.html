@@ -7,10 +7,10 @@
     <title>Поиск туров</title>
     <link href="../static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" id="bootstrap-css2">
-    <script src="../static/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
     <script src="../static/js/jquery-3.3.1.min.js"></script>
     <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <link href="../static/css/avia.css" rel="stylesheet">
     <link href="/css/avia.css" rel="stylesheet">
     <script src="../static/js/bus.js"></script>
@@ -100,6 +100,33 @@
                 <p class="btn btn-dark" id="search-button" onclick="loadTours()">Искать</p>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="descriptionModalLabel">Описание</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <span id="monitoringModalMessage">Создание...</span>
+                <script>
+                    document.getElementById('monitoringModalMessage').style.display = 'none';
+                    $(document).on("click", "#monitoringCreateButton", function(event){
+                        createMonitoring();
+                    });
+                </script>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="monitoringGoButton">Бронировать</button>
+            </div>
+        </div>
     </div>
 </div>
 
